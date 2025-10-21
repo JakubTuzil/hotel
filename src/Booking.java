@@ -1,4 +1,6 @@
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,10 +23,12 @@ public class Booking {
         validateGuests(guests);
         this.guests = new ArrayList<>();
         this.guests.addAll(Arrays.asList(guests));
+        validateRoom(room);
         this.room = room;
         validateDates(checkInDate, checkOutDate);
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
+        validateTypeOfTrip(typeOfTrip);
         this.typeOfTrip = typeOfTrip;
     }
 
@@ -67,12 +71,24 @@ public class Booking {
     }
 
     private void validateDates(LocalDate checkInDate, LocalDate checkOutDate) {
-        if(checkInDate == null || checkOutDate == null) {
+        if (checkInDate == null || checkOutDate == null) {
             throw new IllegalArgumentException("Check-in a check-out musí být zadány.");
         }
 
         if (!checkOutDate.isAfter(checkInDate)) {
             throw new IllegalArgumentException("Check-out date musí následovat po check-in date.");
+        }
+    }
+
+    private void validateTypeOfTrip(TypeOfTrip typeOfTrip) {
+        if (typeOfTrip == null) {
+            throw new IllegalArgumentException("Typ pobytu musí být zadán.");
+        }
+    }
+
+    private void validateRoom (Room room) {
+        if (room==null) {
+            throw new IllegalArgumentException("Číslo pokoje musí být vyplněno");
         }
     }
 
@@ -102,6 +118,7 @@ public class Booking {
 
     public void setRoom(Room room) {
 
+        validateRoom(room);
         this.room = room;
     }
 
@@ -130,9 +147,29 @@ public class Booking {
     }
 
     public void setTypeOfTrip(TypeOfTrip typeOfTrip) {
+
+        validateTypeOfTrip(typeOfTrip);
         this.typeOfTrip = typeOfTrip;
     }
 
     // endregion Getters and Setters
+
+    // region Other methods
+
+    public int getGuestsCount() {
+        return guests.size();
+    }
+
+    public int getBookingLength() {
+
+        long days = ChronoUnit.DAYS.between(getCheckInDate(), getCheckOutDate());
+        return (int) days;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return room.getPricePerNight().multiply(BigDecimal.valueOf(getBookingLength()));
+    }
+
+    // endregion Other methods
 
 }
