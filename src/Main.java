@@ -50,20 +50,20 @@ public class Main {
             manager.addBooking(b);
         }
 
-        System.out.println("");
+        System.out.println();
         System.out.println("==========================");
         System.out.println("STATISTIKA");
         System.out.println("==========================");
-        System.out.println("");
+        System.out.println();
         System.out.println("Počet pracovních pobytů: "+manager.getNumberOfWorkingBookings());
         System.out.println("Průměrný počet hostů na rezervaci: "+manager.getAverageGuests());
-        System.out.println("");
+        System.out.println();
         System.out.println("Prvních osm rekreačních rezervací: ");
         getFormattedSummary(manager.getTopNHolidayBookings());
-        System.out.println("");
+        System.out.println();
         System.out.println("Statistika hostů:");
         manager.printGuestStatistics();
-        System.out.println("");
+        System.out.println();
         getFormattedSummary(allBookings);
     }
 
